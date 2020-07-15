@@ -1,15 +1,15 @@
 <?php
 
 
-namespace App\Models\Filters\Properties;
+namespace App\Models\Filters\Tyres;
 
 
-use App\Property;
+use App\Tyre;
 use App\Services\Filters\BaseSearch;
 use App\Services\Filters\Searchable;
 
-class PropertySearch implements Searchable
+class TyreSearch implements Searchable
 {
-    const MODEL = Property::class;
+    const MODEL = Tyre::class;
     use BaseSearch;
 }

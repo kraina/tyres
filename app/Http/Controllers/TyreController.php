@@ -22,16 +22,20 @@ class TyreController extends Controller
 /*
     function index()
     {
-        $tyres = Tyre::get()->all();
+        $tyres = VehicleType::get()->all();
         return view('index')->with('tyres', $tyres);
     }
 */
     function fetch(Request $request)
     {
+        $parent_key = $request->get('parent_key');
+        $parent_value = $request->get('parent_value');
         $select = $request->get('select');
         $value = $request->get('value');
         $dependent = $request->get('dependent');
-        $data = Tyre::select($dependent)->where($select, $value)
+        $data = Tyre::select($dependent)
+            ->where($parent_key, $parent_value)
+            ->where($select, $value)
             ->groupBy($dependent)
             ->get();
         $output = '<option value="">Select '.str_replace('_', ' ', ucfirst($dependent)).'</option>';
@@ -40,6 +44,21 @@ class TyreController extends Controller
             $output .= '<option value="'.$row->$dependent.'">'.$row->$dependent.'</option>';
         }
         echo $output;
+    }
+    public function ajax_listings(Request $request, Tyre $tyre){
+        if(request()->ajax()) {
+            //if(!empty($request->rooms)&&!empty($request->property_type)&&!empty($request->location)) {
+                //if ($request->rooms === "ALL"&&$request->property_type === "ALL"&&$request->location === "ALL") {
+                    //$tyres = Tyre::select('vehicle_type')->groupBy('vehicle_type')->get()->all();
+            $tyres = $tyre->getTyresBySearch($request)->get();
+                    return view('layouts.ajax_listings', ['tyres' => $tyres]);
+               // }
+              //  $properties = $property->getPropertiesBySearch($request)->orderBy('created_at', 'desc')->get();
+              //  return view('layouts.ajax_listing', ['properties' => $properties]);
+           // }
+        }
+        //$properties = $property->getPropertiesBySearch($request)->orderBy('created_at', 'desc')->get();
+       // return view('listings', ['properties' => $properties]);
     }
 
     /**
