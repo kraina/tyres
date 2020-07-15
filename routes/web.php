@@ -19,3 +19,4 @@ Route::get('/', function () {
 */
 Route::get('/', 'TyreController@index');
 Route::post('/fetch', 'TyreController@fetch')->name('index.fetch');
+Route::get('/layouts/ajax_listings', 'TyreController@ajax_listings')->name('ajax_listings');
