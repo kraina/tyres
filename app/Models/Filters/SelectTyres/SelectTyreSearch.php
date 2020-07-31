@@ -1,15 +1,14 @@
 <?php
 
 
-namespace App\Models\Filters\Tyres;
+namespace App\Models\Filters\SelectTyres;
 
-
-use App\Tyre;
+use App\SelectTyre;
 use App\Services\Filters\BaseSearch;
 use App\Services\Filters\Searchable;
 
-class TyreSearch implements Searchable
+class SelectTyreSearch implements Searchable
 {
-    const MODEL = Tyre::class;
+    const MODEL = SelectTyre::class;
     use BaseSearch;
 }

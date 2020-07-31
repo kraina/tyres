@@ -6,7 +6,7 @@ namespace App\Models\Filters\SelectTyres;
 use App\Services\Filters\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 
-class Vendor implements Filterable
+class Car implements Filterable
 {
 
     public static function apply(Builder $builder, $value)
@@ -21,6 +21,6 @@ class Vendor implements Filterable
             $value = explode(', ', $value);
         }
         */
-        return $builder->where('vendor', $value);
+        return $builder->where('car', $value);
     }
 }

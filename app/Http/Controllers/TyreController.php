@@ -15,7 +15,7 @@ class TyreController extends Controller
     public function index()
     {
         $tyres = Tyre::select('vehicle_type')->groupBy('vehicle_type')->get()->all();
-        return view('index')->with('tyres', $tyres);
+        return view('index2')->with('tyres', $tyres);
 
         //return view('index', compact('vehicle_types', 'vehicle_manufacturers', 'vehicle_models', 'tyre_sizes', 'tyre_models', 'tyre_manufacturers'));
     }
@@ -51,7 +51,8 @@ class TyreController extends Controller
                 //if ($request->rooms === "ALL"&&$request->property_type === "ALL"&&$request->location === "ALL") {
                     //$tyres = Tyre::select('vehicle_type')->groupBy('vehicle_type')->get()->all();
             $tyres = $tyre->getTyresBySearch($request)->get();
-                    return view('layouts.ajax_listings', ['tyres' => $tyres]);
+
+                    return view('layouts.ajax_listings2', ['tyres' => $tyres]);
                // }
               //  $properties = $property->getPropertiesBySearch($request)->orderBy('created_at', 'desc')->get();
               //  return view('layouts.ajax_listing', ['properties' => $properties]);

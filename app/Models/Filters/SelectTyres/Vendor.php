@@ -1,13 +1,12 @@
 <?php
 
 
-namespace App\Models\Filters\Tyres;
-
+namespace App\Models\Filters\SelectTyres;
 
 use App\Services\Filters\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 
-class TyreSize implements Filterable
+class Vendor implements Filterable
 {
 
     public static function apply(Builder $builder, $value)
@@ -22,6 +21,6 @@ class TyreSize implements Filterable
             $value = explode(', ', $value);
         }
         */
-        return $builder->where('tyre_size', $value);
+        return $builder->where('vendor', $value);
     }
 }

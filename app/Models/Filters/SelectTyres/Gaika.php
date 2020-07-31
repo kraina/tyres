@@ -6,7 +6,7 @@ namespace App\Models\Filters\SelectTyres;
 use App\Services\Filters\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 
-class Car implements Filterable
+class Gaika implements Filterable
 {
 
     public static function apply(Builder $builder, $value)
@@ -21,6 +21,8 @@ class Car implements Filterable
             $value = explode(', ', $value);
         }
         */
-        return $builder->where('car', $value);
+
+        //dd($builder->where('gaika', $value));
+        return $builder->where('gaika', $value);
     }
 }

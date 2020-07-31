@@ -56,15 +56,11 @@
                             add_select();
                         }
                     });
-
                 }
 
                 function delete_prev_select(current_index_id){
-
-                    // if ($(this).val() !== '') {
                     var dependents_array = ["vendor", "car", "year", "modification", "pcd", 'diametr', 'gaika', 'zavod_shini', 'zamen_shini', 'tuning_shini', 'zavod_diskov', 'zamen_diskov', 'tuning_diski'];
                     var dependents_array_length = dependents_array.length;
-
                     var current_index = dependents_array.indexOf(current_index_id);
                     var dependent_lenght;
                     var i;
@@ -108,22 +104,12 @@
                         var zamen_diskov = $("#zamen_diskov").val();
                         var tuning_diski = $("#tuning_diski").val();
 
-                        var select = $('.dynamic').attr("id");
-                        var value = $('.dynamic').val();
-                        var dependent = $('#' + select).data('dependent');
-                        var parent_key = $('.dynamic').data('parent');
-                        var parent_value = $("#" + parent_key).val();
                         var _token = $('input[name="_token"]').val();
                         $.ajax({
-                            url: "{{ route('index22.fetch') }}",
+                            url: "{{ route('index.fetch') }}",
                             method: "POST",
                             data: {
-                                select: select,
-                                value: value,
                                 _token: _token,
-                                dependent: dependent,
-                                parent_key: parent_key,
-                                parent_value: parent_value,
                                 vendor: vendor,
                                 car: car,
                                 year: year,
@@ -197,7 +183,7 @@
                         type: 'get',
                         /*headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},*/
                         dataType: 'html',
-                        url: "{{route('ajax_listings22')}}",
+                        url: "{{route('ajax_listings')}}",
                         ifModified: true,
                         cache: false,
                         data: {vendor: vendor, car: car, year: year, modification: modification, pcd: pcd, diametr: diametr, gaika: gaika, zavod_shini: zavod_shini, zamen_shini: zamen_shini, tuning_shini: tuning_shini, zavod_diskov: zavod_diskov, zamen_diskov: zamen_diskov, tuning_diski: tuning_diski, _token: _token},
