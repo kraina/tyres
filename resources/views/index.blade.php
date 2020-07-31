@@ -23,43 +23,16 @@
         </style>
     </head>
     <body>
-        <div class="container box">
+        <div class="container box" id="container-id">
             <h3 align="center">Ajax Dynamic Dependent Dropdown in Laravel</h3><br />
             <div class="form-group">
-                <select name="vehicle_type" id="vehicle_type" class="form-control input-lg dynamic" data-dependent="vehicle_manufacturer">
-                    <option value="">Select Vehicle Type</option>
-                    @foreach($tyres as $tyre)
-                        @if(!empty($tyre->vehicle_type))
-                        <option value="{{ $tyre->vehicle_type}}">{{ $tyre->vehicle_type }}</option>
+                <select name="vendor" id="vendor" class="form-control input-lg dynamic" >
+                    <option value="">Select Vendor</option>
+                    @foreach($select_tyres as $select_tyre)
+                        @if(!empty($select_tyre->vendor))
+                        <option value="{{ $select_tyre->vendor}}">{{ $select_tyre->vendor }}</option>
                         @endif
                     @endforeach
-                </select>
-            </div>
-            <br />
-            <div class="form-group">
-                <select name="vehicle_manufacturer" id="vehicle_manufacturer" class="form-control input-lg dynamic" data-dependent="vehicle_model" data-parent="vehicle_type">
-                    <option value="">Select Vehicle Manufacturer</option>
-                </select>
-            </div>
-            <br />
-            <div class="form-group">
-                <select name="vehicle_model" id="vehicle_model" class="form-control input-lg dynamic" data-dependent="tyre_size" data-parent="vehicle_manufacturer">"
-                    <option value="">Select Vehicle Model</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <select name="tyre_size" id="tyre_size" class="form-control input-lg dynamic" data-dependent="tyre_model" data-parent="vehicle_model">
-                    <option value="">Select Tyre Size</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <select name="tyre_model" id="tyre_model" class="form-control input-lg dynamic" data-dependent="tyre_manufacturer" data-parent="tyre_size">
-                    <option value="">Select Tyre Model</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <select name="tyre_manufacturer" id="tyre_manufacturer" data-parent="tyre_model" class="form-control input-lg">
-                    <option value="">Select Tyre Manufacturer</option>
                 </select>
             </div>
             <button class="btn btn-success" id="search_button">Submit</button>
@@ -72,13 +45,140 @@
         </div>
         <script>
             $(document).ready(function(){
+                function delete_prev_selected_index_0(current_select){
+                    delete_prev_select(current_select);
+                    $(document).one('change', '.dynamic', function (e) {
+                        if($(this).prop('selectedIndex') > 0) {
+                            let select_0 = $(this).prop('selectedIndex');
+                            // e.preventDefault();
+                            // $(this).unbind();
+                            // $(this).bind('change');
+                            add_select();
+                        }
+                    });
+                }
+
+                function delete_prev_select(current_index_id){
+                    var dependents_array = ["vendor", "car", "year", "modification", "pcd", 'diametr', 'gaika', 'zavod_shini', 'zamen_shini', 'tuning_shini', 'zavod_diskov', 'zamen_diskov', 'tuning_diski'];
+                    var dependents_array_length = dependents_array.length;
+                    var current_index = dependents_array.indexOf(current_index_id);
+                    var dependent_lenght;
+                    var i;
+                    var ii;
+                    var next_dependent;
+
+                    if (current_index === 0) {
+                        for (i = 1; i <= Number(dependents_array_length); i++) {
+                            next_dependent = $("#" + dependents_array[Number(current_index) + Number(i)]);
+                            next_dependent.unwrap();
+                            next_dependent.remove();
+                            dependent_lenght = next_dependent.length;
+                        }
+                    }
+                    else{
+                        for (ii = Number(current_index)+1; ii <= Number(dependents_array_length)+1; ii++) {
+                            next_dependent = $("#" + dependents_array[Number(ii)]);
+                            next_dependent2 = next_dependent.attr("id");
+                            next_dependent.unwrap();
+                            next_dependent.remove();
+                            dependent_lenght = next_dependent.length;
+
+                        }
+                    }
+                    return dependent_lenght;
+                }
+                function add_select(){
+                    if($('.dynamic').val() !== '')
+                    {
+                        let vendor = $("#vendor").val();
+                        let car = $("#car").val();
+                        let year = $("#year").val();
+                        let modification = $("#modification").val();
+                        let pcd = $("#pcd").val();
+                        let diametr = $("#diametr").val();
+                        let gaika = $("#gaika").val();
+                        var zavod_shini = $("#zavod_shini").val();
+                        var zamen_shini = $("#zamen_shini").val();
+                        var tuning_shini = $("#tuning_shini").val();
+                        var zavod_diskov = $("#zavod_diskov").val();
+                        var zamen_diskov = $("#zamen_diskov").val();
+                        var tuning_diski = $("#tuning_diski").val();
+
+                        var _token = $('input[name="_token"]').val();
+                        $.ajax({
+                            url: "{{ route('index.fetch') }}",
+                            method: "POST",
+                            data: {
+                                _token: _token,
+                                vendor: vendor,
+                                car: car,
+                                year: year,
+                                modification: modification,
+                                pcd: pcd,
+                                diametr: diametr,
+                                gaika: gaika,
+                                zavod_shini: zavod_shini,
+                                zamen_shini: zamen_shini,
+                                tuning_shini: tuning_shini,
+                                zavod_diskov: zavod_diskov,
+                                zamen_diskov: zamen_diskov,
+                                tuning_diski: tuning_diski
+                            },
+                            success: function (result) {
+                                //alert(result);
+                                //console.log(result);
+                                var result1 = $.trim(result);
+                                var n = result1.length;
+                                if (n === 5) {
+                                    search_tyres();
+                                }
+
+                                $("#search_button").before(result);
+
+                                    let change = false;
+                                    let select_added = false;
+
+                                    $(document).one("change", '.dynamic', function (e) {
+                                        e.preventDefault();
+                                        $(this).unbind();
+                                        $(this).bind('change');
+                                        //console.log($(this).prop('selectedIndex'));
+
+                                        if($(this).prop('selectedIndex') === 0){
+                                            dependent_lenght = delete_prev_selected_index_0($(this).attr("id"));
+                                        }else {
+                                            dependent_lenght = delete_prev_select($(this).attr('id'));
+                                            if (change === false) {
+                                                add_select();
+                                                change = true;
+                                            }
+                                        }
+                                    });
+                                if($(this).attr('id') !== '' && $(this).attr('id') === true && typeof $(this).attr('id') !== "undefined" && change === false && select_added === false){
+                                    add_select();
+                                    select_added = true;
+                                }
+                            }
+                        })
+                    }
+                }
                 function search_tyres(){
-                    var vehicle_manufacturer = $("#vehicle_manufacturer").val();
-                    var vehicle_model = $("#vehicle_model").val();
-                    var tyre_size = $("#tyre_size").val();
-                    var tyre_model = $("#tyre_model").val();
-                    var tyre_manufacturer = $("#tyre_manufacturer").val();
+                    var vendor = $("#vendor").val();
+                    var car = $("#car").val();
+                    var year = $("#year").val();
+                    var modification = $("#modification").val();
+                    var pcd = $("#pcd").val();
+                    var diametr = $("#diametr").val();
+                    var gaika = $("#gaika").val();
+                    var zavod_shini = $("#zavod_shini").val();
+                    var zamen_shini = $("#zamen_shini").val();
+                    var tuning_shini = $("#tuning_shini").val();
+                    var zavod_diskov = $("#zavod_diskov").val();
+                    var zamen_diskov = $("#zamen_diskov").val();
+                    var tuning_diski = $("#tuning_diski").val();
                     var _token = $('input[name="_token"]').val();
+
+
                     $.ajax({
                         type: 'get',
                         /*headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},*/
@@ -86,40 +186,19 @@
                         url: "{{route('ajax_listings')}}",
                         ifModified: true,
                         cache: false,
-                        data: {vehicle_manufacturer: vehicle_manufacturer, vehicle_model: vehicle_model, tyre_size: tyre_size, tyre_model: tyre_model, tyre_manufacturer: tyre_manufacturer, _token: _token},
+                        data: {vendor: vendor, car: car, year: year, modification: modification, pcd: pcd, diametr: diametr, gaika: gaika, zavod_shini: zavod_shini, zamen_shini: zamen_shini, tuning_shini: tuning_shini, zavod_diskov: zavod_diskov, zamen_diskov: zamen_diskov, tuning_diski: tuning_diski, _token: _token},
                         _token: _token,
                         success: function(response){
+                            //alert(response);
                             //$.getScript("{\{asset('js/listings.js')}}");
                             $('#listings_container').replaceWith(response);
                         }
                     });
                 }
+                $( document ).one( "change", "#vendor", add_select);
 
-                $('.dynamic').change(function(){
-                    if($(this).val() != '')
-                    {
-                        var select = $(this).attr("id");
-                        var value = $(this).val();
-                        var dependent = $(this).data('dependent');
-                        var parent_key = $(this).data('parent');
-                        var parent_value = $("#"+parent_key).val();
-                        var _token = $('input[name="_token"]').val();
-                        //alert('parent_key: ' + parent_key);
-                        //alert('parent_value '+ parent_value);
-                        $.ajax({
-                            url:"{{ route('index.fetch') }}",
-                            method:"POST",
-                            data:{select:select, value:value, _token:_token, dependent:dependent, parent_key:parent_key, parent_value:parent_value},
-                            success:function(result)
-                            {
-                                $('#'+dependent).html(result);
-                            }
-
-                        })
-                    }
-                });
                 $('#search_button').click(function(){
-                    search_tyres();
+                        search_tyres();
                 });
             });
         </script>

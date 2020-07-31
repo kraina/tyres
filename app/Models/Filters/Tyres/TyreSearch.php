@@ -3,7 +3,6 @@
 
 namespace App\Models\Filters\Tyres;
 
-
 use App\Tyre;
 use App\Services\Filters\BaseSearch;
 use App\Services\Filters\Searchable;

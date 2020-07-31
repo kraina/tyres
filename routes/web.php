@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 */
-Route::get('/', 'TyreController@index');
-Route::post('/fetch', 'TyreController@fetch')->name('index.fetch');
-Route::get('/layouts/ajax_listings', 'TyreController@ajax_listings')->name('ajax_listings');
+Route::get('/', 'SelectTyreController@index');
+Route::post('/index/fetch', 'SelectTyreController@fetch')->name('index.fetch');
+Route::get('/layouts/ajax_listings', 'SelectTyreController@ajax_listings')->name('ajax_listings');
+
+Route::get('/index2', 'TyreController@index');
+Route::post('/index2/fetch', 'TyreController@fetch')->name('index2.fetch');
+Route::get('/layouts/ajax_listings2', 'TyreController@ajax_listings')->name('ajax_listings2');
